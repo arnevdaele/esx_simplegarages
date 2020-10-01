@@ -4,6 +4,7 @@
 ---------------------------------------
 
 ESX = nil
+
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 ESX.RegisterServerCallback("esx_simplegarages:callback:GetPlayerCashAmount", function(source, cb)
@@ -124,13 +125,18 @@ RegisterCommand('policeimpound', function(src, args, raw)
     end
 end)
 
-RegisterCommand('impound', function(src, args, raw)
+RegisterCommand('impound', function(source, args, raw)
+    local src = source
     local sourcePlayer = ESX.GetPlayerFromId(src)
     local price = tonumber(args[1])
 
-    if sourcePlayer.job.name == 'police' or sourcePlayer.job.name == 'mechanic' then
-        TriggerClientEvent('esx_simplegarages:client:takeVehicleToImpound', src, price)
+    if price ~= nil or price ~= 0 then
+        if sourcePlayer.job.name == 'police' or sourcePlayer.job.name == 'mechanic' then
+            TriggerClientEvent('esx_simplegarages:client:takeVehicleToImpound', src, price)
+        else
+            sourcePlayer.showNotification("You're not a mechanic or Police officer...")
+        end
     else
-        sourcePlayer.showNotification("You're not a mechanic or Police officer...")
+        sourcePlayer.showNotification("Please enter a valid amount.")
     end
 end)
