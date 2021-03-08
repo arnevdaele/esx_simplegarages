@@ -108,3 +108,4 @@ Config.Trim = function(value)
     else
         return nil
     end
+end
